@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/default_profile"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_medium_global"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium_global">
+
+        <moises.com.usersapp.ui.view.TextImageView
+            android:id="@+id/tiv_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:text1="@string/user_name"
+            app:text2="@string/user_name"
+            app:iconImage="@drawable/svg_account"/>
+
+        <moises.com.usersapp.ui.view.TextImageView
+            android:id="@+id/tiv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:text1="@string/name"
+            app:text2="@string/name"
+            app:iconImage="@drawable/svg_account_circle"/>
+
+        <moises.com.usersapp.ui.view.TextImageView
+            android:id="@+id/tiv_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:text1="@string/last_name"
+            app:text2="@string/last_name"
+            app:iconImage="@drawable/svg_account_circle"/>
+
+        <moises.com.usersapp.ui.view.TextImageView
+            android:id="@+id/tiv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:text1="@string/email"
+            app:text2="@string/email"
+            app:iconImage="@drawable/svg_email"/>
+
+    </LinearLayout>
+
+</LinearLayout>

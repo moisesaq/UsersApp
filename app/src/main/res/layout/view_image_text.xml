@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_medium_global"
+    android:gravity="start|center_vertical">
+
+    <ImageView
+        android:id="@+id/imageView"
+        style="@style/ImageViewIcon"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:text="Text Text Text 1"
+            style="@style/TextViewSmall"
+            android:textSize="15dp"
+            android:maxLines="1"
+            android:textStyle="normal"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:text="Text Text 2"
+            style="@style/TextViewSmall"
+            android:textColor="@color/colorSecondaryText"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:text="Text Text 3"
+            style="@style/TextViewSmall"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimaryDark"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        style="@style/ImageButtonCircle"
+        android:visibility="gone"/>
+
+</LinearLayout>
