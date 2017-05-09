@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -65,6 +66,8 @@ public class UserGridAdapter extends BaseAdapter{
                     .error(R.mipmap.default_profile)
                     .into(mImageView);
         }
+        if(user.getName() != null)
+            ((TextView)view.findViewById(R.id.textView)).setText(user.getName().getFirst());
         return view;
     }
 }

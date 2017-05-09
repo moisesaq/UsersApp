@@ -2,7 +2,9 @@ package moises.com.usersapp.model;
 
 import com.google.gson.Gson;
 
-public class Picture {
+import java.io.Serializable;
+
+public class Picture implements Serializable{
     private String large;
     private String medium;
     private String thumbnail;

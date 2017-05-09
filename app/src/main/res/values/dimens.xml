@@ -13,4 +13,7 @@
     <dimen name="margin_min_global">5dp</dimen>
 
     <dimen name="grid_padding">2dp</dimen>
+
+    <dimen name="size_thumbnails">150dp</dimen>
+    <bool name="isTablet">false</bool>
 </resources>

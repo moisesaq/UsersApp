@@ -1,5 +1,6 @@
 package moises.com.usersapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +12,12 @@ import android.view.MenuItem;
 
 import moises.com.usersapp.R;
 import moises.com.usersapp.model.User;
+import moises.com.usersapp.ui.fragment.DetailUserFragment;
 import moises.com.usersapp.ui.fragment.UserListFragment;
 
 public class UserListActivity extends AppCompatActivity implements UserListFragment.OnUserListFragmentListener{
+
+    private boolean twoPanels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +26,16 @@ public class UserListActivity extends AppCompatActivity implements UserListFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        showFragment(UserListFragment.newInstance(), false);
+        if(findViewById(R.id.content_user_detail) != null){
+            twoPanels = true;
+        }
+        showFragment(R.id.content_user_list, UserListFragment.newInstance());
     }
 
-    public void showFragment(Fragment fragment, boolean stack){
+    public void showFragment(int content, Fragment fragment){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        if(stack)
-            ft.addToBackStack(fragment.getClass().getSimpleName());
-        ft.replace(R.id.content_user_list, fragment);
+        ft.replace(content, fragment);
         ft.commit();
     }
 
@@ -46,12 +51,26 @@ public class UserListActivity extends AppCompatActivity implements UserListFragm
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
+    public void onLoadCompleted(User user) {
+        if(twoPanels)
+            showFragment(R.id.content_user_detail, DetailUserFragment.newInstance(user));
+    }
+
+    @Override
     public void onUserClick(User user) {
+        if(twoPanels){
+            showFragment(R.id.content_user_detail, DetailUserFragment.newInstance(user));
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(DetailUserFragment.ARG_PARAM, user);
+            Intent intent = new Intent(this, DetailUserActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
 
     }
 }

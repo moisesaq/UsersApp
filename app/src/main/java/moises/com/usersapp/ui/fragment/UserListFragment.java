@@ -55,13 +55,14 @@ public class UserListFragment extends BaseFragment implements AdapterView.OnItem
             ButterKnife.bind(this, view);
             setupGrid();
         }
+        setTitle("User list");
         return view;
     }
 
     private void setupGrid(){
-        setTitle("User list");
         mUserGridAdapter = new UserGridAdapter(getContext(), new ArrayList<User>());
         mGridUsers.setAdapter(mUserGridAdapter);
+        mGridUsers.setOnItemClickListener(this);
         mPresenter.loadUsers(1, 10, "");
     }
 
@@ -84,6 +85,8 @@ public class UserListFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     public void showUsers(List<User> users) {
         mUserGridAdapter.addItems(users);
+        if(users != null && users.size() > 0)
+            mListener.onLoadCompleted(users.get(0));
     }
 
     @Override
@@ -122,6 +125,7 @@ public class UserListFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     public interface OnUserListFragmentListener{
+        void onLoadCompleted(User user);
         void onUserClick(User user);
     }
 }
