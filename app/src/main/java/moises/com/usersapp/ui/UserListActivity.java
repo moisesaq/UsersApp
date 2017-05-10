@@ -46,15 +46,6 @@ public class UserListActivity extends AppCompatActivity implements UserListFragm
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onLoadCompleted(User user) {
         if(twoPanels)
             showFragment(R.id.content_user_detail, DetailUserFragment.newInstance(user));

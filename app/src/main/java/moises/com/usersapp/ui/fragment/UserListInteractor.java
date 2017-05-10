@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import moises.com.usersapp.R;
 import moises.com.usersapp.data.ApiClientAdapter;
 import moises.com.usersapp.model.Info;
 import moises.com.usersapp.model.User;
@@ -18,21 +19,22 @@ public class UserListInteractor {
         this.mContext = context;
     }
 
-    public void getUserList(int page, int results, String seed, final Callback callback){
+    public void getUserList(final int page, int results, String seed, final Callback callback){
         Call<UserList> listCall = ApiClientAdapter.getInstance().startConnection().getUserList(page, results, seed);
         listCall.enqueue(new retrofit2.Callback<UserList>() {
             @Override
             public void onResponse(Call<UserList> call, Response<UserList> response) {
                 if(response.isSuccessful() && response.body().getUsers().size() > 0){
                     callback.onSuccess(response.body().getUsers(), response.body().getInfo());
-                }else{
-                    callback.onEmptyList("Not found users");
+                }else if(page == 1){
+                    callback.onEmptyList(mContext.getString(R.string.not_found_users));
                 }
             }
 
             @Override
             public void onFailure(Call<UserList> call, Throwable t) {
-                callback.onError("Error " + t.toString());
+                if(page == 1)
+                    callback.onError("Error " + t.toString());
             }
         });
     }

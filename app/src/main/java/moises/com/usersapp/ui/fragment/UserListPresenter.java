@@ -1,11 +1,15 @@
 package moises.com.usersapp.ui.fragment;
 
+import android.util.Log;
+
 import java.util.List;
 
 import moises.com.usersapp.model.Info;
 import moises.com.usersapp.model.User;
 
 public class UserListPresenter implements UserListContract.Presenter, UserListInteractor.Callback{
+
+    private final static String TAG = "USER LIST PRESENTER";
 
     private final UserListContract.View mUserListView;
     private final UserListInteractor mUserListInteractor;
@@ -23,7 +27,9 @@ public class UserListPresenter implements UserListContract.Presenter, UserListIn
 
     @Override
     public void loadUsers(int page, int results, String seed) {
-        mUserListView.showLoading(true);
+        if(page == 1)
+            mUserListView.showLoading(true);
+        //Log.d(TAG, "PAGE -> " + page);
         mUserListInteractor.getUserList(page, results, seed, this);
     }
 

@@ -16,4 +16,5 @@
 
     <dimen name="size_thumbnails">150dp</dimen>
     <bool name="isTablet">false</bool>
+    <bool name="isPhoneLarge">false</bool>
 </resources>

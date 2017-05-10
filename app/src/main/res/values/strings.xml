@@ -6,4 +6,6 @@
     <string name="last_name">Last name</string>
     <string name="user_name">User name</string>
     <string name="email">Email</string>
+    <string name="action_change_view">Change view</string>
+    <string name="not_found_users">Not found users</string>
 </resources>

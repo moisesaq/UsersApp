@@ -54,12 +54,12 @@ public class UserGridAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.user_item, viewGroup, false);
+            view = inflater.inflate(R.layout.user_grid_item, viewGroup, false);
         }
 
         User user = getItem(i);
         if(user.getPicture() != null && user.getPicture().getLarge() != null){
-            ImageView mImageView = (ImageView)view.findViewById(R.id.imageView);
+            ImageView mImageView = (ImageView)view.findViewById(R.id.image_user);
             Picasso.with(mContext)
                     .load(user.getPicture().getLarge())
                     .placeholder(R.mipmap.default_profile)
@@ -67,7 +67,7 @@ public class UserGridAdapter extends BaseAdapter{
                     .into(mImageView);
         }
         if(user.getName() != null)
-            ((TextView)view.findViewById(R.id.textView)).setText(user.getName().getFirst());
+            ((TextView)view.findViewById(R.id.name_user)).setText(user.getName().getFirst());
         return view;
     }
 }
