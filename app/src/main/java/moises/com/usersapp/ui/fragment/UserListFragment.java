@@ -1,7 +1,6 @@
 package moises.com.usersapp.ui.fragment;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -31,11 +30,11 @@ import moises.com.usersapp.ui.view.LoadingView;
 
 public class UserListFragment extends BaseFragment implements UserListContract.View, UserListAdapter.CallBack{
 
+    public static final String TAG = DetailUserFragment.class.getSimpleName();
     private UserListContract.Presenter mPresenter;
     private OnUserListFragmentListener mListener;
 
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
 
     protected LayoutManagerType mCurrentLayoutManagerType;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -62,6 +61,7 @@ public class UserListFragment extends BaseFragment implements UserListContract.V
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         UserListInteractor mInteractor = new UserListInteractor(getContext());
         new UserListPresenter(this, mInteractor);
     }
@@ -72,6 +72,7 @@ public class UserListFragment extends BaseFragment implements UserListContract.V
             view = inflater.inflate(R.layout.fragment_user_list, container, false);
             ButterKnife.bind(this, view);
             setupRecyclerView(savedInstanceState);
+            loadUserList();
         }
         return view;
     }
@@ -84,7 +85,9 @@ public class UserListFragment extends BaseFragment implements UserListContract.V
             mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState.getSerializable(KEY_LAYOUT_MANAGER);
 
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+    }
 
+    private void loadUserList(){
         mPresenter.loadUsers(page, RESULTS, "");
     }
 
@@ -157,7 +160,7 @@ public class UserListFragment extends BaseFragment implements UserListContract.V
     @Override
     public void showUsers(List<User> users) {
         mUserListAdapter.addItems(users);
-        if(isAdded() && isTablet() && users != null && users.get(0) != null && page == 1){
+        if(isAdded() && isTablet() && users != null && users.get(0) != null){
             mListener.onLoadCompleted(users.get(0));
         }
     }

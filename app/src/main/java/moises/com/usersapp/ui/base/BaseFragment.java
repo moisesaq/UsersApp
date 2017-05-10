@@ -39,4 +39,10 @@ public class BaseFragment extends Fragment {
     protected boolean isPhoneLarge(){
         return getActivity().getResources().getBoolean(R.bool.isPhoneLarge);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+    }
 }
