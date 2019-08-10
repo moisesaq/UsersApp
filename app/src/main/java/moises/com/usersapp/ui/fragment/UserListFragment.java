@@ -1,12 +1,12 @@
 package moises.com.usersapp.ui.fragment;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,9 +24,9 @@ import moises.com.usersapp.R;
 import moises.com.usersapp.model.User;
 import moises.com.usersapp.tools.EndlessRecyclerOnScrollListener;
 import moises.com.usersapp.tools.LayoutManagerType;
-import moises.com.usersapp.ui.adapter.UserListAdapter;
+import moises.com.usersapp.ui.users.UserListAdapter;
 import moises.com.usersapp.ui.base.BaseFragment;
-import moises.com.usersapp.ui.view.LoadingView;
+import moises.com.usersapp.ui.customviews.LoadingView;
 
 public class UserListFragment extends BaseFragment implements UserListContract.View, UserListAdapter.CallBack{
 

@@ -1,4 +1,4 @@
-package moises.com.usersapp.ui.view;
+package moises.com.usersapp.ui.customviews;
 
 import android.content.Context;
 import android.os.Parcelable;

@@ -2,14 +2,12 @@ package moises.com.usersapp.ui.base;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 
 import moises.com.usersapp.R;
-import moises.com.usersapp.tools.Utils;
-import moises.com.usersapp.ui.UsersApp;
 
 public class BaseFragment extends Fragment {
     private Toolbar toolbar;

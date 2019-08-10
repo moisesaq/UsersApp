@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:padding="@dimen/padding_medium_global">
 
-            <moises.com.usersapp.ui.view.TextImageView
+            <moises.com.usersapp.ui.customviews.TextImageView
                 android:id="@+id/tiv_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 app:text2="@string/user_name"
                 app:iconImage="@drawable/svg_account"/>
 
-            <moises.com.usersapp.ui.view.TextImageView
+            <moises.com.usersapp.ui.customviews.TextImageView
                 android:id="@+id/tiv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                 app:text2="@string/name"
                 app:iconImage="@drawable/svg_account_circle"/>
 
-            <moises.com.usersapp.ui.view.TextImageView
+            <moises.com.usersapp.ui.customviews.TextImageView
                 android:id="@+id/tiv_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 app:text2="@string/last_name"
                 app:iconImage="@drawable/svg_account_circle"/>
 
-            <moises.com.usersapp.ui.view.TextImageView
+            <moises.com.usersapp.ui.customviews.TextImageView
                 android:id="@+id/tiv_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

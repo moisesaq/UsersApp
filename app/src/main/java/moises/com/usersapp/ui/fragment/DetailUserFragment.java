@@ -1,9 +1,9 @@
 package moises.com.usersapp.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import moises.com.usersapp.R;
 import moises.com.usersapp.model.User;
-import moises.com.usersapp.ui.view.TextImageView;
+import moises.com.usersapp.ui.customviews.TextImageView;
 
 public class DetailUserFragment extends Fragment {
     public static final String TAG = DetailUserFragment.class.getSimpleName();

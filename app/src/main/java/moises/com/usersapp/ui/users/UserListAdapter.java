@@ -1,7 +1,7 @@
-package moises.com.usersapp.ui.adapter;
+package moises.com.usersapp.ui.users;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import moises.com.usersapp.R;
 import moises.com.usersapp.model.User;
 import moises.com.usersapp.tools.LayoutManagerType;
-import moises.com.usersapp.ui.fragment.UserListFragment;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserViewHolder>{
 
