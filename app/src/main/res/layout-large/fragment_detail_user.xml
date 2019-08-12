@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/iv_user"
+        android:id="@+id/imageUser"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
@@ -26,7 +26,7 @@
             android:padding="@dimen/padding_medium_global">
 
             <moises.com.usersapp.ui.customviews.TextImageView
-                android:id="@+id/tiv_user_name"
+                android:id="@+id/tivUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -35,7 +35,7 @@
                 app:iconImage="@drawable/svg_account"/>
 
             <moises.com.usersapp.ui.customviews.TextImageView
-                android:id="@+id/tiv_name"
+                android:id="@+id/tivName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -44,7 +44,7 @@
                 app:iconImage="@drawable/svg_account_circle"/>
 
             <moises.com.usersapp.ui.customviews.TextImageView
-                android:id="@+id/tiv_last_name"
+                android:id="@+id/tivLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -53,7 +53,7 @@
                 app:iconImage="@drawable/svg_account_circle"/>
 
             <moises.com.usersapp.ui.customviews.TextImageView
-                android:id="@+id/tiv_email"
+                android:id="@+id/tivEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"

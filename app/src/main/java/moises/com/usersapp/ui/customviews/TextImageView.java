@@ -3,6 +3,7 @@ package moises.com.usersapp.ui.customviews;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -13,9 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import moises.com.usersapp.R;
 import moises.com.usersapp.tools.SavedState;
-import moises.com.usersapp.tools.Utils;
 
 public class TextImageView extends LinearLayout implements View.OnClickListener{
 
@@ -70,12 +72,12 @@ public class TextImageView extends LinearLayout implements View.OnClickListener{
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.view_image_text, this, true);
 
-        content = (LinearLayout)findViewById(R.id.content);
-        imageView = (ImageView)findViewById(R.id.imageView);
-        textView1 = (TextView)findViewById(R.id.textView1);
-        textView2 = (TextView)findViewById(R.id.textView2);
-        textView3 = (TextView)findViewById(R.id.textView3);
-        imageButton = (ImageButton)findViewById(R.id.imageButton);
+        content = findViewById(R.id.content);
+        imageView = findViewById(R.id.imageView);
+        textView1 = findViewById(R.id.textView1);
+        textView2 = findViewById(R.id.textView2);
+        textView3 = findViewById(R.id.textView3);
+        imageButton = findViewById(R.id.imageButton);
         imageButton.setOnClickListener(this);
     }
 
@@ -176,20 +178,20 @@ public class TextImageView extends LinearLayout implements View.OnClickListener{
 
     public void setTextColor(int color){
         if(color > 0){
-            textView1.setTextColor(Utils.getColor(color));
-            textView2.setTextColor(Utils.getColor(color));
-            textView3.setTextColor(Utils.getColor(color));
+            textView1.setTextColor(getColor(color));
+            textView2.setTextColor(getColor(color));
+            textView3.setTextColor(getColor(color));
         }
     }
 
     public void setTextView2TextColor(int color){
         if(color > 0){
-            textView2.setTextColor(Utils.getColor(color));
+            textView2.setTextColor(getColor(color));
         }
     }
     public void setTextView3TextColor(int color){
         if(color > 0){
-            textView3.setTextColor(Utils.getColor(color));
+            textView3.setTextColor(getColor(color));
         }
     }
 
@@ -206,9 +208,9 @@ public class TextImageView extends LinearLayout implements View.OnClickListener{
     public void setEnabled(boolean enabled){
         super.setEnabled(enabled);
         if(enabled)
-            textView1.setTextColor(Utils.getColor(R.color.colorPrimaryDark));
+            textView1.setTextColor(getColor(R.color.colorPrimaryDark));
         else
-            textView1.setTextColor(Utils.getColor(R.color.colorAccent));
+            textView1.setTextColor(getColor(R.color.colorAccent));
     }
 
     @Override
@@ -250,5 +252,14 @@ public class TextImageView extends LinearLayout implements View.OnClickListener{
     @Override
     protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
         dispatchThawSelfOnly(container);
+    }
+
+    private int getColor(int id){
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 23) {
+            return ContextCompat.getColor(getContext(), id);
+        } else {
+            return getContext().getResources().getColor(id);
+        }
     }
 }
