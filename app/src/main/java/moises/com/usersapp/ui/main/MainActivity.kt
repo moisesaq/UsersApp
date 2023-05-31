@@ -15,12 +15,13 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.activity_main.*
 import moises.com.usersapp.R
+import moises.com.usersapp.databinding.ActivityMainBinding
 import moises.com.usersapp.model.User
 import moises.com.usersapp.ui.main.users.UsersFragment
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+    private lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var injector: DispatchingAndroidInjector<Fragment>
     @Inject
@@ -34,12 +35,13 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUp()
     }
 
     private fun setUp() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         twoPanels = resources.getBoolean(R.bool.isTablet)
         replaceFragment(R.id.main_container, UsersFragment.newInstance())
         eventViewModel.event.observe(this, Observer { if (it is ShowUserDetail) showUserDetail(it.user) })

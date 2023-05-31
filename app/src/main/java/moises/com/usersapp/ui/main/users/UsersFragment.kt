@@ -13,13 +13,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 
 import javax.inject.Inject
 
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_users.*
 import moises.com.usersapp.R
+import moises.com.usersapp.databinding.FragmentUsersBinding
 import moises.com.usersapp.extensions.isVisible
 import moises.com.usersapp.model.User
 import moises.com.usersapp.tools.EndlessRecyclerOnScrollListener
@@ -29,6 +28,7 @@ import moises.com.usersapp.ui.main.MainEventViewModel
 import moises.com.usersapp.ui.main.users.adapter.UsersAdapter
 
 class UsersFragment : BaseFragment() {
+    private lateinit var binding: FragmentUsersBinding
     @Inject
     lateinit var usersAdapter: UsersAdapter
     @Inject
@@ -56,8 +56,9 @@ class UsersFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_users, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentUsersBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,23 +69,25 @@ class UsersFragment : BaseFragment() {
     private fun setupRecyclerView() {
         usersAdapter.addOnTap { eventViewModel.showUserDetail(it) }
         layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = usersAdapter
+        binding.recyclerView.apply {
+            layoutManager = layoutManager
+            adapter = usersAdapter
+        }
         loadUserList()
     }
 
     private fun loadUserList() {
-        viewModel.output.loading.observe(viewLifecycleOwner, Observer { loading.isVisible(it) })
-        viewModel.output.success.observe(viewLifecycleOwner, Observer { usersAdapter.addItems(it) })
-        viewModel.output.error.observe(viewLifecycleOwner, Observer { showMessageInToast(it) })
-        viewModel.output.isDataValid.observe(viewLifecycleOwner, Observer { if (!it) showMessageInToast("Empty")})
+        viewModel.output.loading.observe(viewLifecycleOwner) { binding.loading.isVisible(it) }
+        viewModel.output.success.observe(viewLifecycleOwner) { usersAdapter.addItems(it) }
+        viewModel.output.error.observe(viewLifecycleOwner) { showMessageInToast(it) }
+        viewModel.output.isDataValid.observe(viewLifecycleOwner) { if (!it) showMessageInToast("Empty") }
         viewModel.loadUsers(page, 10, "")
     }
 
     private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
         var scrollPosition = 0
-        if (recyclerView.layoutManager != null) {
-            scrollPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        if (binding.recyclerView.layoutManager != null) {
+            scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         }
 
         when (layoutType) {
@@ -98,13 +101,13 @@ class UsersFragment : BaseFragment() {
             }
         }
 
-        recyclerView.layoutManager = layoutManager
-        recyclerView.scrollToPosition(scrollPosition)
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.scrollToPosition(scrollPosition)
         usersAdapter.setLayoutManagerType(currentLayoutType)
-        recyclerView.adapter = usersAdapter
+        binding.recyclerView.adapter = usersAdapter
 
         menuChangeView?.setIcon(currentLayoutType.icon)
-        recyclerView.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager as LinearLayoutManager?, page) {
+        binding.recyclerView.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager as LinearLayoutManager?, page) {
             override fun onLoadMore(currentPage: Int) {
                 //mPresenter.loadUsers(currentPage, RESULTS, "");
                 page = currentPage
@@ -112,12 +115,12 @@ class UsersFragment : BaseFragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        menuChangeView = menu!!.findItem(R.id.action_change_view)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menuChangeView = menu.findItem(R.id.action_change_view)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_change_view -> {
                 setRecyclerViewLayoutManager(if (currentLayoutType == LayoutType.LIST)
                     LayoutType.GRID

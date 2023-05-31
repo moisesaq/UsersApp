@@ -16,10 +16,10 @@ open class BaseFragment : Fragment() {
         }
 
     protected val isTablet: Boolean
-        get() = activity!!.resources.getBoolean(R.bool.isTablet)
+        get() = requireActivity().resources.getBoolean(R.bool.isTablet)
 
     protected val isPhoneLarge: Boolean
-        get() = activity!!.resources.getBoolean(R.bool.isPhoneLarge)
+        get() = requireActivity().resources.getBoolean(R.bool.isPhoneLarge)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

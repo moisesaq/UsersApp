@@ -6,6 +6,7 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import moises.com.usersapp.injection.users.UsersActivityComponent
 import moises.com.usersapp.repository.base.ApiService
 import moises.com.usersapp.repository.Repository
@@ -18,7 +19,7 @@ import moises.com.usersapp.ui.UsersApp
 class AppModule {
     @Singleton
     @Provides
-    fun provideContext(usersApp: UsersApp): Context {
+    fun provideContext(@ApplicationContext usersApp: UsersApp): Context {
         return usersApp.applicationContext
     }
 
