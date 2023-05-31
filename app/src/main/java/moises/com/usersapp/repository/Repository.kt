@@ -1,12 +1,8 @@
 package moises.com.usersapp.repository
 
 import io.reactivex.Single
-import moises.com.usersapp.model.User
-import moises.com.usersapp.model.UserList
-import moises.com.usersapp.repository.base.ApiService
-import moises.com.usersapp.repository.service.Service
+import moises.com.usersapp.repository.response.UserList
 import moises.com.usersapp.repository.service.ServiceContract
-import java.util.*
 import javax.inject.Inject
 
 class Repository

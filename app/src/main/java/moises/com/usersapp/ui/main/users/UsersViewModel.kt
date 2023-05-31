@@ -7,7 +7,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import moises.com.usersapp.model.User
-import moises.com.usersapp.model.UserList
+import moises.com.usersapp.repository.response.UserList
 import moises.com.usersapp.repository.RepositoryContract
 import moises.com.usersapp.ui.base.Output
 import timber.log.Timber
@@ -33,9 +33,9 @@ class UsersViewModel
 
     private fun success(list: UserList) {
         hideLoading()
-        output.success.value = list.users
-        output.isDataValid.value = list.users.isNotEmpty()
-        isEmpty = list.users.isEmpty()
+        output.success.value = list.results
+        output.isDataValid.value = list.results.isNotEmpty()
+        isEmpty = list.results.isEmpty()
     }
 
     private fun error(e: Throwable) {

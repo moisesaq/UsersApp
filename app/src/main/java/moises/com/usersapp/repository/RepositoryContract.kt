@@ -1,8 +1,7 @@
 package moises.com.usersapp.repository
 
 import io.reactivex.Single
-import moises.com.usersapp.model.User
-import moises.com.usersapp.model.UserList
+import moises.com.usersapp.repository.response.UserList
 
 interface RepositoryContract {
 

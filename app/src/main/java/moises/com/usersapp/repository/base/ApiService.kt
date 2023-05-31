@@ -1,8 +1,7 @@
 package moises.com.usersapp.repository.base
 
 import io.reactivex.Single
-import moises.com.usersapp.model.UserList
-import retrofit2.Call
+import moises.com.usersapp.repository.response.UserList
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -45,7 +45,7 @@ class UserDetailFragment : Fragment() {
                     .placeholder(R.mipmap.default_profile)
                     .error(R.mipmap.default_profile)
                     .into(imageUser)
-            tivUserName.text1 = it.login.userName
+            tivUserName.text1 = it.login.username
             tivName.text1 = it.name.first
             tivLastName.text1 = it.name.last
             tivEmail.text1 = it.email
