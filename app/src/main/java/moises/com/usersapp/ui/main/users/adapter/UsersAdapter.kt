@@ -9,9 +9,7 @@ import moises.com.usersapp.model.User
 import moises.com.usersapp.tools.LayoutType
 import javax.inject.Inject
 
-class UsersAdapter
-    @Inject
-    constructor(): RecyclerView.Adapter<UserViewHolder>() {
+class UsersAdapter: RecyclerView.Adapter<UserViewHolder>() {
     private val users = mutableListOf<User>()
     private lateinit var onTap: (User) -> Unit
     private var layoutType: LayoutType? = null

@@ -1,22 +1,19 @@
 package moises.com.usersapp.ui.main.users
 
 import android.os.Bundle
-
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-
-import javax.inject.Inject
-
-import dagger.android.support.AndroidSupportInjection
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import moises.com.usersapp.R
 import moises.com.usersapp.databinding.FragmentUsersBinding
 import moises.com.usersapp.extensions.isVisible
@@ -26,18 +23,16 @@ import moises.com.usersapp.tools.LayoutType
 import moises.com.usersapp.ui.base.BaseFragment
 import moises.com.usersapp.ui.main.MainEventViewModel
 import moises.com.usersapp.ui.main.users.adapter.UsersAdapter
+import timber.log.Timber
 
+@AndroidEntryPoint
 class UsersFragment : BaseFragment() {
     private lateinit var binding: FragmentUsersBinding
-    @Inject
-    lateinit var usersAdapter: UsersAdapter
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: UsersViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, viewModelFactory).get(UsersViewModel::class.java)
-    }
-    private lateinit var eventViewModel: MainEventViewModel
 
+    private val usersViewModel: UsersViewModel by viewModels()
+    private val eventViewModel: MainEventViewModel by activityViewModels()
+
+    private lateinit var usersAdapter: UsersAdapter
     private lateinit var currentLayoutType: LayoutType
     private var layoutManager: RecyclerView.LayoutManager? = null
 
@@ -46,14 +41,6 @@ class UsersFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): UsersFragment = UsersFragment()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-        activity?.let {
-            eventViewModel = ViewModelProviders.of(it, viewModelFactory).get(MainEventViewModel::class.java)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -67,21 +54,20 @@ class UsersFragment : BaseFragment() {
     }
 
     private fun setupRecyclerView() {
+        usersAdapter = UsersAdapter()
         usersAdapter.addOnTap { eventViewModel.showUserDetail(it) }
         layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.apply {
-            layoutManager = layoutManager
-            adapter = usersAdapter
-        }
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = usersAdapter
         loadUserList()
     }
 
     private fun loadUserList() {
-        viewModel.output.loading.observe(viewLifecycleOwner) { binding.loading.isVisible(it) }
-        viewModel.output.success.observe(viewLifecycleOwner) { usersAdapter.addItems(it) }
-        viewModel.output.error.observe(viewLifecycleOwner) { showMessageInToast(it) }
-        viewModel.output.isDataValid.observe(viewLifecycleOwner) { if (!it) showMessageInToast("Empty") }
-        viewModel.loadUsers(page, 10, "")
+        usersViewModel.output.loading.observe(viewLifecycleOwner) { binding.loading.isVisible(it) }
+        usersViewModel.output.success.observe(viewLifecycleOwner) { usersAdapter.addItems(it) }
+        usersViewModel.output.error.observe(viewLifecycleOwner) { showMessageInToast(it) }
+        usersViewModel.output.isDataValid.observe(viewLifecycleOwner) { if (!it) showMessageInToast("Empty") }
+        usersViewModel.loadUsers(page, 10, "")
     }
 
     private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
