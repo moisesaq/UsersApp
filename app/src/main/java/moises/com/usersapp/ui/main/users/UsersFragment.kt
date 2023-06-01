@@ -19,6 +19,7 @@ import moises.com.usersapp.extensions.isVisible
 import moises.com.usersapp.model.User
 import moises.com.usersapp.tools.EndlessRecyclerOnScrollListener
 import moises.com.usersapp.tools.LayoutType
+import moises.com.usersapp.extensions.tryToCast
 import moises.com.usersapp.ui.base.BaseFragment
 import moises.com.usersapp.ui.base.State
 import moises.com.usersapp.ui.main.MainEventViewModel
@@ -128,5 +129,3 @@ class UsersFragment : BaseFragment() {
         }
     }
 }
-
-inline fun <reified T> Any?.tryToCast(defaultValue: T) = if (this is T) this else defaultValue
