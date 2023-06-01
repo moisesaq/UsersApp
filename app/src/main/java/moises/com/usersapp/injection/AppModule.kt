@@ -6,6 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import moises.com.usersapp.repository.Repository
 import moises.com.usersapp.repository.RepositoryContract
 import moises.com.usersapp.repository.base.ApiService
@@ -22,4 +24,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRepository(api: ApiService): RepositoryContract = Repository(api)
+
+    @Provides
+    fun provideDispatcherMain(): CoroutineDispatcher = Dispatchers.Main
 }
