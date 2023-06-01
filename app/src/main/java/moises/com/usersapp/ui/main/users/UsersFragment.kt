@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,9 +20,9 @@ import moises.com.usersapp.model.User
 import moises.com.usersapp.tools.EndlessRecyclerOnScrollListener
 import moises.com.usersapp.tools.LayoutType
 import moises.com.usersapp.ui.base.BaseFragment
+import moises.com.usersapp.ui.base.State
 import moises.com.usersapp.ui.main.MainEventViewModel
 import moises.com.usersapp.ui.main.users.adapter.UsersAdapter
-import timber.log.Timber
 
 @AndroidEntryPoint
 class UsersFragment : BaseFragment() {
@@ -59,15 +58,20 @@ class UsersFragment : BaseFragment() {
         layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = usersAdapter
-        loadUserList()
+        loadUsers()
     }
 
-    private fun loadUserList() {
-        usersViewModel.output.loading.observe(viewLifecycleOwner) { binding.loading.isVisible(it) }
-        usersViewModel.output.success.observe(viewLifecycleOwner) { usersAdapter.addItems(it) }
-        usersViewModel.output.error.observe(viewLifecycleOwner) { showMessageInToast(it) }
-        usersViewModel.output.isDataValid.observe(viewLifecycleOwner) { if (!it) showMessageInToast("Empty") }
-        usersViewModel.loadUsers(page, 10)
+    private fun loadUsers() {
+        usersViewModel.state.observe(viewLifecycleOwner, this::onStateChanged)
+        usersViewModel.loadUsers(page, 50)
+    }
+
+    private fun onStateChanged(state: State) {
+        when(state) {
+            is State.Loading -> binding.loading.isVisible(state.isLoading)
+            is State.Success<*> -> usersAdapter.addItems(state.data.tryToCast(emptyList()))
+            is State.Error -> showError(state.error)
+        }
     }
 
     private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
@@ -124,3 +128,5 @@ class UsersFragment : BaseFragment() {
         }
     }
 }
+
+inline fun <reified T> Any?.tryToCast(defaultValue: T) = if (this is T) this else defaultValue

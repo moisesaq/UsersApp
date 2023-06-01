@@ -34,4 +34,8 @@ open class BaseFragment : Fragment() {
     protected fun showMessageInToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+
+    protected fun showError(throwable: Throwable) {
+        Toast.makeText(context, throwable.localizedMessage, Toast.LENGTH_LONG).show()
+    }
 }
