@@ -1,11 +1,5 @@
 package moises.com.usersapp.injection
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,7 +28,6 @@ object NetModule {
         return Retrofit.Builder()
                 .baseUrl("https://randomuser.me")//BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build()
     }

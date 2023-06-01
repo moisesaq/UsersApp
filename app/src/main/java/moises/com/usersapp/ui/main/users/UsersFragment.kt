@@ -67,7 +67,7 @@ class UsersFragment : BaseFragment() {
         usersViewModel.output.success.observe(viewLifecycleOwner) { usersAdapter.addItems(it) }
         usersViewModel.output.error.observe(viewLifecycleOwner) { showMessageInToast(it) }
         usersViewModel.output.isDataValid.observe(viewLifecycleOwner) { if (!it) showMessageInToast("Empty") }
-        usersViewModel.loadUsers(page, 10, "")
+        usersViewModel.loadUsers(page, 10)
     }
 
     private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
