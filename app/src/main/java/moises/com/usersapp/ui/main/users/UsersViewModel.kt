@@ -26,7 +26,7 @@ class UsersViewModel @Inject constructor(
 
     fun loadUsers(page: Int, result: Int) {
         viewModelScope.launch(dispatcher) {
-            _state.value = State.Loading(isEmpty)
+            updateLoading(isEmpty)
             _state.value = try {
                 val users = repository.getUsers(page, result)
                 isEmpty = users.isEmpty()
@@ -34,8 +34,12 @@ class UsersViewModel @Inject constructor(
             } catch (exception: Exception) {
                 State.Error(exception.localizedMessage ?: "Error!")
             }
-            _state.value = State.Loading(false)
+            updateLoading(false)
         }
+    }
+
+    fun updateLoading(isLoading: Boolean) {
+        _state.value = State.Loading(isLoading)
     }
 
     fun test() {
