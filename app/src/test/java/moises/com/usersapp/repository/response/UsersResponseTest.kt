@@ -1,9 +1,6 @@
 package moises.com.usersapp.repository.response
 
 import com.google.common.truth.Truth.assertWithMessage
-import moises.com.usersapp.model.Login
-import moises.com.usersapp.model.Name
-import moises.com.usersapp.model.Picture
 import moises.com.usersapp.model.User
 import org.junit.Before
 import org.junit.Test
@@ -24,9 +21,7 @@ class UsersResponseTest {
 
     @Test
     fun validateIfResultIsNotEmpty() {
-        val user = User(Login("username"), Name("title", "", ""),
-            "email", Picture(""))
-        val response = UsersResponse(listOf(user), info)
+        val response = UsersResponse(listOf(User.testUser()), info)
         assertWithMessage("Result of users is NOT empty").that(response.results).isNotEmpty()
     }
 }

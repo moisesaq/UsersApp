@@ -26,5 +26,5 @@ object AppModule {
     fun provideRepository(api: ApiService): RepositoryContract = Repository(api)
 
     @Provides
-    fun provideDispatcherMain(): CoroutineDispatcher = Dispatchers.Main
+    fun provideDispatcherMain(): CoroutineDispatcher = Dispatchers.IO
 }

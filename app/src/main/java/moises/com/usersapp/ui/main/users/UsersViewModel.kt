@@ -29,7 +29,7 @@ class UsersViewModel @Inject constructor(
                 isEmpty = users.isEmpty()
                 State.Success(users)
             } catch (exception: Exception) {
-                State.Error(exception)
+                State.Error(exception.localizedMessage ?: "Error!")
             }
             _state.value = State.Loading(false)
         }

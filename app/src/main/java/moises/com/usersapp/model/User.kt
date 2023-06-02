@@ -10,4 +10,10 @@ data class User(
 ) {
 
     override fun toString(): String = Gson().toJson(this)
+
+    companion object {
+
+        fun testUser() = User(Login("username"),
+            Name("name", "", ""), "", Picture(""))
+    }
 }
