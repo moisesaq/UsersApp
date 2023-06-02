@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import moises.com.usersapp.repository.RepositoryContract
 import moises.com.usersapp.ui.base.State
@@ -32,6 +35,12 @@ class UsersViewModel @Inject constructor(
                 State.Error(exception.localizedMessage ?: "Error!")
             }
             _state.value = State.Loading(false)
+        }
+    }
+
+    fun test() {
+        GlobalScope.launch(Dispatchers.Main) {
+            val users = repository.getUsers(0, 10)
         }
     }
 }

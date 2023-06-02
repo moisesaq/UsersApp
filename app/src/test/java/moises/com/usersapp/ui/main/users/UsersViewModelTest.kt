@@ -51,6 +51,7 @@ class UsersViewModelTest {
         usersViewModel2.loadUsers(0, 10)
         assertWithMessage("Start loading...").that(states[0]).isEqualTo(State.Loading(true))
         assertWithMessage("Users failure load").that(states[1]).isEqualTo(State.Error(errorMessage))
+        // assertWithMessage("Users failure load").that(states[1]).isInstanceOf(State.Error::class.java)
         assertWithMessage("Finish loading").that(states[2]).isEqualTo(State.Loading(false))
     }
 }
