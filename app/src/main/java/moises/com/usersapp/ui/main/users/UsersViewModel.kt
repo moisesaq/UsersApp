@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import moises.com.usersapp.repository.RepositoryContract
 import moises.com.usersapp.ui.base.State
@@ -25,26 +22,29 @@ class UsersViewModel @Inject constructor(
         private set
 
     fun loadUsers(page: Int, result: Int) {
+        printPage(page)
         viewModelScope.launch(dispatcher) {
-            updateLoading(isEmpty)
-            _state.value = try {
-                val users = repository.getUsers(page, result)
-                isEmpty = users.isEmpty()
-                State.Success(users)
-            } catch (exception: Exception) {
-                State.Error(exception.localizedMessage ?: "Error!")
-            }
-            updateLoading(false)
+            handleLoading(isEmpty)
+            setState(
+                try {
+                    val users = repository.getUsers(page, result)
+                    isEmpty = users.isEmpty()
+                    State.Success(users)
+                } catch (exception: Throwable) {
+                    State.Error(exception)
+                }
+            )
+            handleLoading(false)
         }
     }
 
-    fun updateLoading(isLoading: Boolean) {
-        _state.value = State.Loading(isLoading)
+    private fun handleLoading(isLoading: Boolean) = setState(State.Loading(isLoading))
+
+    private fun setState(state: State) {
+        _state.postValue(state)
     }
 
-    fun test() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val users = repository.getUsers(0, 10)
-        }
+    private fun printPage(page: Int) {
+
     }
 }

@@ -71,7 +71,7 @@ class UsersFragment : BaseFragment() {
         when(state) {
             is State.Loading -> binding.loading.isVisible(state.isLoading)
             is State.Success<*> -> usersAdapter.addItems(state.data.tryToCast(emptyList()))
-            is State.Error -> showMessageInToast(state.errorMessage)
+            is State.Error -> showError(state.error)
         }
     }
 
