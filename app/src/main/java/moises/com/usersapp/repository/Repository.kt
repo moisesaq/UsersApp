@@ -2,7 +2,6 @@ package moises.com.usersapp.repository
 
 import moises.com.usersapp.model.User
 import moises.com.usersapp.repository.base.ApiService
-import moises.com.usersapp.repository.response.UsersResponse
 import javax.inject.Inject
 
 class Repository
@@ -10,13 +9,6 @@ class Repository
 constructor(private val api: ApiService) : RepositoryContract {
 
     override suspend fun getUsers(page: Int, result: Int): List<User> {
-        val response = api.getUserList(page, result)
-        showResponse(response)
-        return response.results
+        return api.getUserList(page, result).results
     }
-
-    private fun showResponse(response: UsersResponse) {
-    }
-
-
 }

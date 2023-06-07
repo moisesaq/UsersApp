@@ -31,8 +31,9 @@ import timber.log.Timber
 class UsersFragment : BaseFragment() {
     private lateinit var binding: FragmentUsersBinding
 
-    private val usersViewModel: UsersViewModel by activityViewModels()
+    private val usersViewModel: UsersViewModel by viewModels()
     private val eventViewModel: MainEventViewModel by activityViewModels()
+    // private val users2ViewModel: Users2ViewModel by viewModels()
 
     private lateinit var usersAdapter: UsersAdapter
     private lateinit var currentLayoutType: LayoutType
@@ -53,6 +54,8 @@ class UsersFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        loadUsers()
+        // observeUsers2ViewModel()
     }
 
     private fun setupRecyclerView() {
@@ -60,7 +63,6 @@ class UsersFragment : BaseFragment() {
         layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = usersAdapter
-        loadUsers()
     }
 
     private fun loadUsers() {
@@ -71,10 +73,27 @@ class UsersFragment : BaseFragment() {
     private fun onStateChanged(state: State) {
         Timber.e(":-> onStateChanged: $state")
         when(state) {
-            is State.Loading -> binding.progressBar.isVisible = state.isLoading
-            is State.Success<*> -> usersAdapter.addItems(state.data.tryToCast(emptyList()))
-            is State.Error -> showError(state.error)
+            is State.Loading -> showLoading(true)
+            is State.Success<*> -> {
+                showLoading(false)
+                usersAdapter.addItems(state.data.tryToCast(emptyList()))
+            }
+            is State.Error -> {
+                showLoading(false)
+                showError(state.error)
+            }
         }
+    }
+
+    /*private fun observeUsers2ViewModel() {
+        users2ViewModel.output.loading.observe(viewLifecycleOwner, this::showLoading)
+        users2ViewModel.output.success.observe(viewLifecycleOwner, usersAdapter::addItems)
+        users2ViewModel.output.error.observe(viewLifecycleOwner, this::showError)
+        users2ViewModel.loadUsers(page, 50)
+    }*/
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.isVisible = isLoading
     }
 
     /*private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {

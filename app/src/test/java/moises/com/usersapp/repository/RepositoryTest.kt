@@ -32,7 +32,6 @@ internal class RepositoryTest {
     fun `repository returns at least one user`() {
         // runBlocking { Mockito.`when`(repository.getUsers(0, 10)).thenReturn(listOf(User.testUser())) }
         coEvery { apiService.getUserList(any(), any()) } returns response
-        // coEvery { repository.getUsers(any(), any()) } returns listOf(user)
         runBlocking {
             val users = repository.getUsers(0, 10)
             assertWithMessage("Repository has returned one user").that(users.first()).isEqualTo(response.results.first())
@@ -70,6 +69,5 @@ internal class RepositoryTest {
         coVerify {
             apiService.getUserList(0, 10)
         }
-
     }
 }

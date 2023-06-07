@@ -49,9 +49,8 @@ class UsersViewModelTest {
     fun `states has been executed correctly when users loaded successfully`() {
         coEvery { repository.getUsers(any(), any()) } returns listOf(user)
         usersViewModel.loadUsers(0, 10)
-        assertWithMessage("Start loading...").that(states[0]).isEqualTo(State.Loading(true))
+        assertWithMessage("State loading...").that(states[0]).isEqualTo(State.Loading)
         assertWithMessage("Users loaded successfully").that(states[1]).isEqualTo(State.Success(listOf(user)))
-        assertWithMessage("Finish loading").that(states[2]).isEqualTo(State.Loading(false))
         coVerify {
             repository.getUsers(0, 10)
         }
@@ -63,25 +62,10 @@ class UsersViewModelTest {
         coEvery { repository.getUsers(any(), any()) } throws exception
         usersViewModel.loadUsers(0, 10)
 
-        assertWithMessage("Start loading...").that(states[0]).isEqualTo(State.Loading(true))
-        assertWithMessage("Users failure load").that(states[1]).isEqualTo(State.Error(exception))
-        // assertWithMessage("Users failure load").that(states[1]).isInstanceOf(State.Error::class.java)
-        assertWithMessage("Finish loading").that(states[2]).isEqualTo(State.Loading(false))
+        val expectedStates = listOf(State.Loading, State.Error(exception))
+        assertWithMessage("States have been executed correctly").that(states).isEqualTo(expectedStates)
         coVerify {
             repository.getUsers(0, 10)
-        }
-    }
-
-    @Test
-    fun `loading is calling setState function`() {
-        coEvery { repository.getUsers(any(), any()) } returns listOf(user)
-        // every { usersViewModel["handleLoading"](any()) } returns Unit
-        // every { usersViewModel["handleLoading"](any()) } returns Unit
-        // every { usersViewModel["handleLoading"](false) } returns Unit
-        every { usersViewModel["setState"](State.Success(listOf(user))) } returns Unit
-        usersViewModel.loadUsers(0, 10)
-        verify(exactly = 1) {
-            usersViewModel["setState"](State.Success(listOf(user)))
         }
     }
 }

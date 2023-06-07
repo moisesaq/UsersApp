@@ -1,57 +1,43 @@
 package moises.com.usersapp.ui.main.users
 
 import com.google.common.truth.Truth.assertWithMessage
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import moises.com.usersapp.MainDispatcherRule
-import moises.com.usersapp.model.User
-import moises.com.usersapp.repository.MockRepositoryError
-import moises.com.usersapp.repository.MockRepositorySuccess
-import moises.com.usersapp.ui.base.State
+import moises.com.usersapp.repository.RepositoryContract
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class Users2ViewModelTest {
+    private val repository: RepositoryContract = mockk()
     private val testDispatcher = UnconfinedTestDispatcher()
-    private lateinit var usersViewModel: UsersViewModel
-    private lateinit var usersViewModel2: UsersViewModel
-    private lateinit var states: MutableList<State>
+    private lateinit var users2ViewModel: Users2ViewModel
+    private lateinit var loadingStates: MutableList<Boolean>
 
     @get:Rule
-    var instantExecutorRule = MainDispatcherRule()
+    var instantTaskExecutorRule = MainDispatcherRule()
 
     @Before
     fun setup() {
-        states = mutableListOf()
-        usersViewModel = UsersViewModel(MockRepositorySuccess(), testDispatcher)
-        usersViewModel.state.observeForever(states::add)
-        usersViewModel2 = UsersViewModel(MockRepositoryError(), testDispatcher)
-        usersViewModel2.state.observeForever(states::add)
+        users2ViewModel = Users2ViewModel(repository, testDispatcher)
+        loadingStates = mutableListOf()
+        users2ViewModel.output.loading.observeForever(loadingStates::add)
     }
 
     @Test
-    fun userListHasBeenLoaded() {
-        usersViewModel.loadUsers(0, 10)
-        assertWithMessage("Users has been loaded successfully").that(usersViewModel.isEmpty).isFalse()
-    }
-
-    @Test
-    fun `states has been executed correctly when users loaded successfully`() {
-        usersViewModel.loadUsers(0, 10)
-        assertWithMessage("Start loading...").that(states[0]).isEqualTo(State.Loading(true))
-        assertWithMessage("Users loaded successfully").that(states[1]).isEqualTo(State.Success(listOf(User.testUser())))
-        assertWithMessage("Finish loading").that(states[2]).isEqualTo(State.Loading(false))
-    }
-
-    @Test
-    fun `states has been executed correctly when users failure load`() {
-        val errorMessage = "Something went wrong!"
-        usersViewModel2.loadUsers(0, 10)
-        assertWithMessage("Start loading...").that(states[0]).isEqualTo(State.Loading(true))
-        // assertWithMessage("Users failure load").that(states[1]).isEqualTo(State.Error(errorMessage))
-        // assertWithMessage("Users failure load").that(states[1]).isInstanceOf(State.Error::class.java)
-        assertWithMessage("Finish loading").that(states[2]).isEqualTo(State.Loading(false))
+    fun `state are being executed correctly`() {
+        coEvery { repository.getUsers(any(), any()) } returns listOf(mockk())
+        users2ViewModel.loadUsers(0, 10)
+        coVerify {
+            repository.getUsers(0, 10)
+        }
+        assertWithMessage("Loading states has been execute correctly").that(loadingStates).isEqualTo(listOf(true, false))
+        assertWithMessage("User has been loaded successfully").that(users2ViewModel.output.success.value).isNotEmpty()
     }
 }

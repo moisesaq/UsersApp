@@ -24,20 +24,27 @@ class UsersViewModel @Inject constructor(
         private set
 
     fun loadUsers(page: Int, result: Int) {
-        Timber.e(":-> Load users: $page")
+        if (state.value is State.Success<*>) {
+            Timber.e(":-> Users have already been loaded")
+            return
+        }
         viewModelScope.launch(dispatcher) {
-            handleLoading(isEmpty)
+            setState(State.Loading)
             try {
-                handleSuccess(repository.getUsers(page, result))
-            } catch (exception: Throwable) {
-                handleError(exception)
+                val users = repository.getUsers(page, result)
+                isEmpty = users.isEmpty()
+                setState(State.Success(users))
+                // setState(State.Loading(false))
+            } catch (throwable: Throwable) {
+                setState(State.Error(throwable))
+                // setState(State.Loading(false))
             }
         }
     }
 
-    private fun handleSuccess(users: List<User>) {
-        isEmpty = users.isEmpty()
+    /*private fun handleSuccess(users: List<User>) {
         handleLoading(false)
+        isEmpty = users.isEmpty()
         setState(State.Success(users))
     }
 
@@ -46,10 +53,9 @@ class UsersViewModel @Inject constructor(
         setState(State.Error(throwable))
     }
 
-    private fun handleLoading(isLoading: Boolean) = setState(State.Loading(isLoading))
+    private fun handleLoading(isLoading: Boolean) = setState(State.Loading(isLoading))*/
 
     private fun setState(state: State) {
-        Timber.i(":-> Set state: $state")
         _state.postValue(state)
     }
 }
