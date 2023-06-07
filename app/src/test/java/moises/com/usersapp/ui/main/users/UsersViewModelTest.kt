@@ -75,10 +75,13 @@ class UsersViewModelTest {
     @Test
     fun `loading is calling setState function`() {
         coEvery { repository.getUsers(any(), any()) } returns listOf(user)
-        every { usersViewModel["printPage"](any()) } returns Unit
+        // every { usersViewModel["handleLoading"](any()) } returns Unit
+        // every { usersViewModel["handleLoading"](any()) } returns Unit
+        // every { usersViewModel["handleLoading"](false) } returns Unit
+        every { usersViewModel["setState"](State.Success(listOf(user))) } returns Unit
         usersViewModel.loadUsers(0, 10)
         verify(exactly = 1) {
-            usersViewModel["printPage"](0)
+            usersViewModel["setState"](State.Success(listOf(user)))
         }
     }
 }

@@ -34,9 +34,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(containerId: Int, fragment: Fragment, stack: Boolean = false) {
         supportFragmentManager.beginTransaction().run {
-            replace(containerId, fragment)
-            if (stack)
+            if (stack) {
                 addToBackStack(fragment::class.java.name)
+            }
+            replace(containerId, fragment)
             commit()
         }
     }

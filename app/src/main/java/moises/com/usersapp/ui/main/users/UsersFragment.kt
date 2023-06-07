@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,12 +25,13 @@ import moises.com.usersapp.ui.base.BaseFragment
 import moises.com.usersapp.ui.base.State
 import moises.com.usersapp.ui.main.MainEventViewModel
 import moises.com.usersapp.ui.main.users.adapter.UsersAdapter
+import timber.log.Timber
 
 @AndroidEntryPoint
 class UsersFragment : BaseFragment() {
     private lateinit var binding: FragmentUsersBinding
 
-    private val usersViewModel: UsersViewModel by viewModels()
+    private val usersViewModel: UsersViewModel by activityViewModels()
     private val eventViewModel: MainEventViewModel by activityViewModels()
 
     private lateinit var usersAdapter: UsersAdapter
@@ -54,8 +56,7 @@ class UsersFragment : BaseFragment() {
     }
 
     private fun setupRecyclerView() {
-        usersAdapter = UsersAdapter()
-        usersAdapter.addOnTap { eventViewModel.showUserDetail(it) }
+        usersAdapter = UsersAdapter { eventViewModel.showUserDetail(it) }
         layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = usersAdapter
@@ -68,14 +69,15 @@ class UsersFragment : BaseFragment() {
     }
 
     private fun onStateChanged(state: State) {
+        Timber.e(":-> onStateChanged: $state")
         when(state) {
-            is State.Loading -> binding.loading.isVisible(state.isLoading)
+            is State.Loading -> binding.progressBar.isVisible = state.isLoading
             is State.Success<*> -> usersAdapter.addItems(state.data.tryToCast(emptyList()))
             is State.Error -> showError(state.error)
         }
     }
 
-    private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
+    /*private fun setRecyclerViewLayoutManager(layoutType: LayoutType) {
         var scrollPosition = 0
         if (binding.recyclerView.layoutManager != null) {
             scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
@@ -127,5 +129,5 @@ class UsersFragment : BaseFragment() {
         if (isAdded && isTablet ) {
             //mListener.onLoadCompleted(users.get(0));
         }
-    }
+    }*/
 }
