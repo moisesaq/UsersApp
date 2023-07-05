@@ -1,47 +1,39 @@
-package moises.com.usersapp.injection.app
-
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Singleton
+package moises.com.usersapp.injection
 
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import moises.com.usersapp.repository.base.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
-internal object NetModule {
+@InstallIn(SingletonComponent::class)
+object NetModule {
 
     private const val defaultTimeOut: Long = 20
 
+    @Singleton
     @Provides
-    @Reusable
-    @JvmStatic
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 
+    @Singleton
     @Provides
-    @Reusable
-    @JvmStatic
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl("https://randomuser.me")//BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build()
     }
 
+    @Singleton
     @Provides
-    @Reusable
-    @JvmStatic
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
@@ -51,12 +43,9 @@ internal object NetModule {
                 .build()
     }
 
+    @Singleton
     @Provides
-    @Reusable
-    @JvmStatic
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        return httpLoggingInterceptor
+        return HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
     }
 }

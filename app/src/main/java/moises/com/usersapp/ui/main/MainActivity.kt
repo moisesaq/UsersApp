@@ -1,55 +1,43 @@
 package moises.com.usersapp.ui.main
 
 import android.os.Bundle
-
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-
-import javax.inject.Inject
-
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import moises.com.usersapp.R
+import moises.com.usersapp.databinding.ActivityMainBinding
 import moises.com.usersapp.model.User
 import moises.com.usersapp.ui.main.users.UsersFragment
 
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
-    @Inject
-    lateinit var injector: DispatchingAndroidInjector<Fragment>
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val eventViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, viewModelFactory).get(MainEventViewModel::class.java)
-    }
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
+    private val eventViewModel: MainEventViewModel by viewModels()
     private var twoPanels: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUp()
     }
 
     private fun setUp() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         twoPanels = resources.getBoolean(R.bool.isTablet)
         replaceFragment(R.id.main_container, UsersFragment.newInstance())
-        eventViewModel.event.observe(this, Observer { if (it is ShowUserDetail) showUserDetail(it.user) })
+        eventViewModel.event.observe(this) { if (it is MainEventViewModel.MainEvent.ShowUserDetail) showUserDetail(it.user) }
     }
 
     private fun replaceFragment(containerId: Int, fragment: Fragment, stack: Boolean = false) {
         supportFragmentManager.beginTransaction().run {
-            replace(containerId, fragment)
-            if (stack)
+            if (stack) {
                 addToBackStack(fragment::class.java.name)
+            }
+            replace(containerId, fragment)
             commit()
         }
     }
@@ -66,6 +54,4 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
             replaceFragment(R.id.main_container, UserDetailFragment.newInstance(user), true)
         }
     }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? = injector
 }

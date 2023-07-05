@@ -1,50 +1,61 @@
 package moises.com.usersapp.ui.main.users
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
 import moises.com.usersapp.model.User
-import moises.com.usersapp.model.UserList
 import moises.com.usersapp.repository.RepositoryContract
-import moises.com.usersapp.ui.base.Output
+import moises.com.usersapp.ui.base.State
 import timber.log.Timber
 import javax.inject.Inject
 
-class UsersViewModel
-    @Inject
-    constructor(private val repository: RepositoryContract): ViewModel() {
-    val output = Output<List<User>, String>()
-    private val compositeDisposable = CompositeDisposable()
-    private var isEmpty = true
+@HiltViewModel
+class UsersViewModel @Inject constructor(
+    private val repository: RepositoryContract,
+    private val dispatcher: CoroutineDispatcher
+    ) : ViewModel() {
+    private val _state = MutableLiveData<State>()
+    val state: LiveData<State> get() = _state
+    var isEmpty = true
+        private set
 
-    fun loadUsers(page: Int, result: Int, seed: String) {
-        output.loading.value = isEmpty
-        repository.getUsers(page, result, seed)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                        onSuccess = { success(it) },
-                        onError = { error(it) }
-                ).addTo(compositeDisposable)
+    fun loadUsers(page: Int, result: Int) {
+        if (state.value is State.Success<*>) {
+            Timber.e(":-> Users have already been loaded")
+            return
+        }
+        viewModelScope.launch(dispatcher) {
+            setState(State.Loading)
+            try {
+                val users = repository.getUsers(page, result)
+                isEmpty = users.isEmpty()
+                setState(State.Success(users))
+                // setState(State.Loading(false))
+            } catch (throwable: Throwable) {
+                setState(State.Error(throwable))
+                // setState(State.Loading(false))
+            }
+        }
     }
 
-    private fun success(list: UserList) {
-        hideLoading()
-        output.success.value = list.users
-        output.isDataValid.value = list.users.isNotEmpty()
-        isEmpty = list.users.isEmpty()
+    /*private fun handleSuccess(users: List<User>) {
+        handleLoading(false)
+        isEmpty = users.isEmpty()
+        setState(State.Success(users))
     }
 
-    private fun error(e: Throwable) {
-        Timber.e("Error loading users: ${e.localizedMessage}")
-        hideLoading()
-        output.error.value = e.localizedMessage
+    private fun handleError(throwable: Throwable) {
+        handleLoading(false)
+        setState(State.Error(throwable))
     }
 
-    private fun hideLoading() {
-        output.loading.value = false
+    private fun handleLoading(isLoading: Boolean) = setState(State.Loading(isLoading))*/
+
+    private fun setState(state: State) {
+        _state.postValue(state)
     }
 }

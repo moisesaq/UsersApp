@@ -16,10 +16,10 @@ open class BaseFragment : Fragment() {
         }
 
     protected val isTablet: Boolean
-        get() = activity!!.resources.getBoolean(R.bool.isTablet)
+        get() = requireActivity().resources.getBoolean(R.bool.isTablet)
 
     protected val isPhoneLarge: Boolean
-        get() = activity!!.resources.getBoolean(R.bool.isPhoneLarge)
+        get() = requireActivity().resources.getBoolean(R.bool.isPhoneLarge)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +32,10 @@ open class BaseFragment : Fragment() {
     }
 
     protected fun showMessageInToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    protected fun showError(throwable: Throwable) {
+        Toast.makeText(context, throwable.localizedMessage, Toast.LENGTH_LONG).show()
     }
 }

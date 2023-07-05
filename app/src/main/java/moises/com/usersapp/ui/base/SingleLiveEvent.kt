@@ -1,11 +1,10 @@
-package moises.com.usersapp.extensions
+package moises.com.usersapp.ui.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.annotation.MainThread
 import androidx.collection.ArraySet
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-
 
 class SingleLiveEvent<T>: MutableLiveData<T>() {
 
@@ -45,10 +44,10 @@ class SingleLiveEvent<T>: MutableLiveData<T>() {
 
         private var pending = false
 
-        override fun onChanged(value: T) {
+        override fun onChanged(t: T) {
             if (pending) {
                 pending = false
-                observer.onChanged(value)
+                observer.onChanged(t)
             }
         }
 
