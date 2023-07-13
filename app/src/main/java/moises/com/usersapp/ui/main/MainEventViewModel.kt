@@ -2,8 +2,8 @@ package moises.com.usersapp.ui.main
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import moises.com.usersapp.extensions.SingleLiveEvent
 import moises.com.usersapp.model.User
+import moises.com.usersapp.ui.base.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
