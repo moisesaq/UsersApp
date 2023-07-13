@@ -37,7 +37,7 @@ class Users2ViewModelTest {
         coVerify {
             repository.getUsers(0, 10)
         }
-        assertWithMessage("Loading states has been execute correctly").that(loadingStates).isEqualTo(listOf(true, false))
+        assertWithMessage("Loading states has been execute correctly").that(loadingStates).isEqualTo(listOf(true, true))
         assertWithMessage("User has been loaded successfully").that(users2ViewModel.output.success.value).isNotEmpty()
     }
 }
